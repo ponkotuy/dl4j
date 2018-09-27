@@ -1,0 +1,7 @@
+
+path {
+  dl4j_dir = ""
+  images_dir = ""
+  model_file = ""
+  original_images_dir = ""
+}

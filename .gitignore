@@ -1,0 +1,25 @@
+
+# Created by https://www.gitignore.io/api/playframework
+
+### PlayFramework ###
+# Ignore Play! working directory #
+bin/
+/db
+.eclipse
+/lib/
+/logs/
+/modules
+/project/project
+/project/target
+/target
+tmp/
+test-result
+server.pid
+*.eml
+/dist/
+.cache
+
+
+# End of https://www.gitignore.io/api/playframework
+
+src/main/resources/application.conf
