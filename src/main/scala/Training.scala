@@ -34,8 +34,8 @@ object Training {
   val NEpoches = 20
   val Iterations = 2
   val Seed = 1234
-  val Width = 160
-  val Height = 120
+  val Width = 120
+  val Height = 90
   val NonZeroBias = 1
   val DropOut = 0.5
   val TestRate: Int = 10
