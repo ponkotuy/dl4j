@@ -14,7 +14,7 @@ object Execution {
   def main(args: Array[String]): Unit = {
     import utils.Path._
     import Training.{Height, NChannels, Width}
-    val model = ModelSerializer.restoreMultiLayerNetwork(ModelPath.toFile)
+    val model = ModelSerializer.restoreMultiLayerNetwork(modelPath.toFile)
     val loader = new NativeImageLoader(Width, Height, NChannels)
     println(model.conf())
     args.foreach { fname =>

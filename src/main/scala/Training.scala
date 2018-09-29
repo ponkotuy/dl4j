@@ -9,7 +9,7 @@ import org.deeplearning4j.eval.Evaluation
 import org.deeplearning4j.nn.api.OptimizationAlgorithm
 import org.deeplearning4j.nn.conf.distribution.{GaussianDistribution, NormalDistribution}
 import org.deeplearning4j.nn.conf.inputs.InputType
-import org.deeplearning4j.nn.conf.layers.{ConvolutionLayer, DenseLayer, LocalResponseNormalization, OutputLayer, SubsamplingLayer}
+import org.deeplearning4j.nn.conf.layers._
 import org.deeplearning4j.nn.conf.{GradientNormalization, LearningRatePolicy, NeuralNetConfiguration, Updater}
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
@@ -44,7 +44,7 @@ object Training {
   def main(args: Array[String]): Unit = {
     val random = new Random(Seed)
     val labelGen = MyPathLabelGen
-    val fileSplit = new FileSplit(ImagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)
+    val fileSplit = new FileSplit(imagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)
     val pathFilter = new BalancedPathFilter(random.self, BaseImageLoader.ALLOWED_FORMATS, labelGen)
     val Array(testInput, trainInput) = fileSplit.sample(pathFilter, TestRate, TrainRate)
 
@@ -107,7 +107,7 @@ object Training {
       testData.reset()
     }
 
-    ModelSerializer.writeModel(model, ModelPath.toFile, false)
+    ModelSerializer.writeModel(model, modelPath.toFile, false)
   }
 
   def inputToData(input: InputSplit, labelGen: PathLabelGenerator): RecordReaderDataSetIterator = {

@@ -1,7 +1,15 @@
 [
   {
     "name": "training",
-    "memory": 30000,
-    "essential": true
+    "image": "632747955816.dkr.ecr.ap-northeast-1.amazonaws.com/dl4j:latest",
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "dl4j",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "training"
+      }
+    }
   }
 ]

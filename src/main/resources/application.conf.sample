@@ -5,3 +5,7 @@ path {
   model_file = ""
   original_images_dir = ""
 }
+
+aws {
+  s3 = ""
+}
