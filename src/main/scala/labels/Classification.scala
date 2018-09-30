@@ -5,7 +5,7 @@ import java.nio.file.{Path => JPath}
 import utils.Path
 
 sealed abstract class Classification(val name: String) {
-  def path: JPath = Path.ImagesPath.resolve(name)
+  def path: JPath = Path.imagesPath.resolve(name)
 }
 
 object Classification {

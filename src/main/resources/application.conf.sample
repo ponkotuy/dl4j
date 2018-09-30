@@ -5,3 +5,7 @@ path {
   model_file = ""
   original_images_dir = ""
 }
+
+s3 {
+  bucket = "dl4j-s3"
+}

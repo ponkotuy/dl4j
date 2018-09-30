@@ -10,7 +10,7 @@ object Registration {
     import utils.Path._
     import Classification._
 
-    Files.find(OriginalImagePath){ (path: Path, attr: BasicFileAttributes) =>
+    Files.find(originalImagePath){ (path: Path, attr: BasicFileAttributes) =>
       attr.isDirectory && Classification.names.contains(path.getFileName.toString)
     }.foreach { dir =>
       println(s"Target directory: ${dir}")

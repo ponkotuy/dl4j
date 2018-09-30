@@ -20,7 +20,7 @@ import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.impl.{ActivationLReLU, ActivationSoftmax}
 import org.nd4j.linalg.learning.config.Nesterovs
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import utils.MyPathLabelGen
+import utils.{MyPathLabelGen, Path, S3Wrapper}
 
 import scala.collection.JavaConverters._
 import scala.util.Random
@@ -44,7 +44,7 @@ object Training {
   def main(args: Array[String]): Unit = {
     val random = new Random(Seed)
     val labelGen = MyPathLabelGen
-    val fileSplit = new FileSplit(ImagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)
+    val fileSplit = new FileSplit(imagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)
     val pathFilter = new BalancedPathFilter(random.self, BaseImageLoader.ALLOWED_FORMATS, labelGen)
     val Array(testInput, trainInput) = fileSplit.sample(pathFilter, TestRate, TrainRate)
 
@@ -107,10 +107,11 @@ object Training {
       testData.reset()
     }
 
-    ModelSerializer.writeModel(model, ModelPath.toFile, false)
+    ModelSerializer.writeModel(model, modelPath.toFile, false)
+    new S3Wrapper(Path.bucket).upload(Path.modelName, modelPath.toFile)
   }
 
-  def inputToData(input: InputSplit, labelGen: PathLabelGenerator): RecordReaderDataSetIterator = {
+  private def inputToData(input: InputSplit, labelGen: PathLabelGenerator): RecordReaderDataSetIterator = {
     val dataReader = new ImageRecordReader(Height, Width, NChannels, labelGen)
     dataReader.initialize(input)
     new RecordReaderDataSetIterator(dataReader, BatchSize, 1, OutputNum)
