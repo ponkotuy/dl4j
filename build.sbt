@@ -17,9 +17,3 @@ libraryDependencies ++= Seq(
 )
 
 run / fork := true
-run / javaOptions ++= Seq(
-  "-Xmx2G",
-  "-Xms1G",
-  "-Dorg.bytedeco.javacpp.maxbytes=8G",
-  "-Dorg.bytedeco.javacpp.maxphysicalbytes=8G"
-)

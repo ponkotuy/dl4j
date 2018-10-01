@@ -20,7 +20,7 @@ import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.impl.{ActivationLReLU, ActivationSoftmax}
 import org.nd4j.linalg.learning.config.Nesterovs
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import utils.{MyPathLabelGen, Path, RsyncOption, RsyncWrapper, S3Wrapper, Streams}
+import utils.{Files, MyPathLabelGen, Path, RsyncOption, RsyncWrapper, S3Wrapper, Streams}
 
 import scala.collection.JavaConverters._
 import scala.util.Random
@@ -31,11 +31,11 @@ object Training {
   val NChannels = 3
   val OutputNum = 2
   val BatchSize = 128
-  val NEpoches = 20
+  val NEpoches = 18
   val Iterations = 2
   val Seed = 1234
-  val Width = 120
-  val Height = 90
+  val Width = 160
+  val Height = 120
   val NonZeroBias = 1
   val DropOut = 0.5
   val TestRate: Int = 10
@@ -50,6 +50,7 @@ object Training {
   )
 
   def main(args: Array[String]): Unit = {
+    Files.mkdirs(Path.imagesPath)
     rsync.run(Path.imageRsync, Path.imagesPath.toString)
     val random = new Random(Seed)
     val labelGen = MyPathLabelGen
