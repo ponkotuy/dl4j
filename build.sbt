@@ -12,7 +12,8 @@ libraryDependencies ++= Seq(
   "org.nd4j" %% "nd4s" % dl4jVersion,
   "org.nd4j" % "nd4j-native-platform" % dl4jVersion,
   "com.typesafe" % "config" % "1.3.2",
-  "com.github.seratch" %% "awscala-s3" % "0.8.+"
+  "com.github.seratch" %% "awscala-s3" % "0.8.+",
+  "com.github.fracpete" % "rsync4j" % "3.1.2-8"
 )
 
 run / fork := true

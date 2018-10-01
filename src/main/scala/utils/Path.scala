@@ -12,6 +12,7 @@ object Path {
   val dl4jPath: JPath = Paths.get(path.getString("dl4j_dir"))
   val imagesPath: JPath = dl4jPath.resolve(path.getString("images_dir"))
   val modelPath: JPath = dl4jPath.resolve(modelName)
+  val imageRsync: String = path.getString("image_rsync")
 
   val originalImagePath: JPath = Paths.get(path.getString("original_images_dir"))
 

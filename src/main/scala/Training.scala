@@ -20,7 +20,7 @@ import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.impl.{ActivationLReLU, ActivationSoftmax}
 import org.nd4j.linalg.learning.config.Nesterovs
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import utils.{MyPathLabelGen, Path, S3Wrapper}
+import utils.{MyPathLabelGen, Path, RsyncOption, RsyncWrapper, S3Wrapper, Streams}
 
 import scala.collection.JavaConverters._
 import scala.util.Random
@@ -41,7 +41,16 @@ object Training {
   val TestRate: Int = 10
   val TrainRate: Int = 100 - TestRate
 
+  val rsync = new RsyncWrapper(Streams.Stdout)(
+    RsyncOption.Archive,
+    RsyncOption.Delete,
+    RsyncOption.Verbose,
+    RsyncOption.CopyLinks,
+    RsyncOption.Rsh("ssh")
+  )
+
   def main(args: Array[String]): Unit = {
+    rsync.run(Path.imageRsync, Path.imagesPath.toString)
     val random = new Random(Seed)
     val labelGen = MyPathLabelGen
     val fileSplit = new FileSplit(imagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)

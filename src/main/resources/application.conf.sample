@@ -2,6 +2,7 @@
 path {
   dl4j_dir = ""
   images_dir = ""
+  image_rsync = ""
   model_file = ""
   original_images_dir = ""
 }
