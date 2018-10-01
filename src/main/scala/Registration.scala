@@ -7,10 +7,10 @@ import utils.Files
 object Registration {
 
   def main(args: Array[String]): Unit = {
-    import utils.Path._
+    import utils.MyConfig._
     import Classification._
 
-    Files.find(originalImagePath){ (path: Path, attr: BasicFileAttributes) =>
+    Files.find(path.originalImagePath){ (path: Path, attr: BasicFileAttributes) =>
       attr.isDirectory && Classification.names.contains(path.getFileName.toString)
     }.foreach { dir =>
       println(s"Target directory: ${dir}")
@@ -31,6 +31,12 @@ object Registration {
             val linkDir = Ero.path.resolve(parent.getFileName)
             Files.mkdirs(linkDir)
             Files.createSymbolicLink(linkDir.resolve(file.getFileName), moved)
+          }
+        case Title =>
+          Files.find(dir)(isImage).foreach{ file =>
+            println(s"  Title target file: ${file.getFileName}")
+            val parent = file.getParent.getParent
+            Files.move(file, parent.resolve(file.getFileName))
           }
       }
       Files.delete(dir)

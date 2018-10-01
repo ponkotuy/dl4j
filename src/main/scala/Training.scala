@@ -20,22 +20,19 @@ import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.impl.{ActivationLReLU, ActivationSoftmax}
 import org.nd4j.linalg.learning.config.Nesterovs
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import utils.{Files, MyPathLabelGen, Path, RsyncOption, RsyncWrapper, S3Wrapper, Streams}
+import utils.{Files, MyPathLabelGen, RsyncOption, RsyncWrapper, S3Wrapper, Streams}
 
 import scala.collection.JavaConverters._
 import scala.util.Random
 
 object Training {
-  import utils.Path._
+  import utils.MyConfig._
 
   val NChannels = 3
   val OutputNum = 2
   val BatchSize = 128
-  val NEpoches = 18
   val Iterations = 2
   val Seed = 1234
-  val Width = 160
-  val Height = 120
   val NonZeroBias = 1
   val DropOut = 0.5
   val TestRate: Int = 10
@@ -50,11 +47,11 @@ object Training {
   )
 
   def main(args: Array[String]): Unit = {
-    Files.mkdirs(Path.imagesPath)
-    rsync.run(Path.imageRsync, Path.imagesPath.toString)
+    Files.mkdirs(path.imagesPath)
+    rsync.run(path.imageRsync, path.imagesPath.toString)
     val random = new Random(Seed)
     val labelGen = MyPathLabelGen
-    val fileSplit = new FileSplit(imagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)
+    val fileSplit = new FileSplit(path.imagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)
     val pathFilter = new BalancedPathFilter(random.self, BaseImageLoader.ALLOWED_FORMATS, labelGen)
     val Array(testInput, trainInput) = fileSplit.sample(pathFilter, TestRate, TrainRate)
 
@@ -95,7 +92,7 @@ object Training {
         .layer(12, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD).name("output").nOut(OutputNum).activation(new ActivationSoftmax).build())
         .backprop(true)
         .pretrain(false)
-        .setInputType(InputType.convolutional(Height, Width, NChannels))
+        .setInputType(InputType.convolutional(property.height, property.width, NChannels))
         .build()
     val model = new MultiLayerNetwork(conf)
     model.init()
@@ -105,7 +102,7 @@ object Training {
     uiServer.attach(statsStorage)
     model.setListeners(new StatsListener(statsStorage))
 
-    (1 to NEpoches).foreach { i =>
+    (1 to property.epoch).foreach { i =>
       model.fit(trainData)
       println(s"Complete epoch $i")
       val eval = new Evaluation(OutputNum)
@@ -117,12 +114,12 @@ object Training {
       testData.reset()
     }
 
-    ModelSerializer.writeModel(model, modelPath.toFile, false)
-    new S3Wrapper(Path.bucket).upload(Path.modelName, modelPath.toFile)
+    ModelSerializer.writeModel(model, path.modelPath.toFile, false)
+    new S3Wrapper(bucket).upload(path.modelName, path.modelPath.toFile)
   }
 
   private def inputToData(input: InputSplit, labelGen: PathLabelGenerator): RecordReaderDataSetIterator = {
-    val dataReader = new ImageRecordReader(Height, Width, NChannels, labelGen)
+    val dataReader = new ImageRecordReader(property.height, property.width, NChannels, labelGen)
     dataReader.initialize(input)
     new RecordReaderDataSetIterator(dataReader, BatchSize, 1, OutputNum)
   }

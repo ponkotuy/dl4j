@@ -12,10 +12,9 @@ object Execution {
   val Positive = 0.85
 
   def main(args: Array[String]): Unit = {
-    import utils.Path._
-    import Training.{Height, NChannels, Width}
-    val model = ModelSerializer.restoreMultiLayerNetwork(modelPath.toFile)
-    val loader = new NativeImageLoader(Width, Height, NChannels)
+    import utils.MyConfig._
+    val model = ModelSerializer.restoreMultiLayerNetwork(path.modelPath.toFile)
+    val loader = new NativeImageLoader(property.width, property.height, Training.NChannels)
     println(model.conf())
     args.foreach { fname =>
       val matrix = loader.asMatrix(new File(fname))
