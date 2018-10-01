@@ -49,6 +49,7 @@ object Training {
   def main(args: Array[String]): Unit = {
     Files.mkdirs(path.imagesPath)
     rsync.run(path.imageRsync, path.imagesPath.toString)
+    setThreads()
     val random = new Random(Seed)
     val labelGen = MyPathLabelGen
     val fileSplit = new FileSplit(path.imagesPath.toFile, BaseImageLoader.ALLOWED_FORMATS, random.self)
@@ -116,6 +117,19 @@ object Training {
 
     ModelSerializer.writeModel(model, path.modelPath.toFile, false)
     new S3Wrapper(bucket).upload(path.modelName, path.modelPath.toFile)
+  }
+
+  private def setThreads(): Unit = {
+    import org.nd4j.linalg.factory.Nd4j
+    import org.nd4j.nativeblas.NativeOpsHolder
+    import org.nd4j.nativeblas.Nd4jBlas
+
+    val nd4jBlas = Nd4j.factory.blas.asInstanceOf[Nd4jBlas]
+    nd4jBlas.setMaxThreads(nd4jBlas.getMaxThreads * 2)
+
+    val instance = NativeOpsHolder.getInstance
+    val deviceNativeOps = instance.getDeviceNativeOps
+    deviceNativeOps.setOmpNumThreads(deviceNativeOps.ompGetNumThreads() * 2)
   }
 
   private def inputToData(input: InputSplit, labelGen: PathLabelGenerator): RecordReaderDataSetIterator = {

@@ -10,3 +10,11 @@ path {
 s3 {
   bucket = "dl4j-s3"
 }
+
+property {
+  image {
+    width = 120
+    height = 90
+  }
+  epoch = 15
+}

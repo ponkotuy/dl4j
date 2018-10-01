@@ -1,6 +1,6 @@
 resource "aws_instance" "dl4j" {
   ami = "ami-7172b611"
-  instance_type = "r5.xlarge"
+  instance_type = "c5.4xlarge"
   monitoring = false
   tags {
     Name = "dl4j"
