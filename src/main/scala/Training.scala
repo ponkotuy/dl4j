@@ -116,7 +116,7 @@ object Training {
     }
 
     ModelSerializer.writeModel(model, path.modelPath.toFile, false)
-    new S3Wrapper(bucket).upload(path.modelName, path.modelPath.toFile)
+    new S3Wrapper(bucket).upload(path.modelName, path.modelPath)
   }
 
   private def setThreads(): Unit = {
