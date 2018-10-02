@@ -7,8 +7,14 @@ path {
   original_images_dir = ""
 }
 
-s3 {
-  bucket = "dl4j-s3"
+aws {
+  ec2 {
+    instance_id = ""
+  }
+
+  s3 {
+   bucket = "dl4j-s3"
+  }
 }
 
 property {

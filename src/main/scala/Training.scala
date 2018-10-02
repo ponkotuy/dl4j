@@ -20,7 +20,7 @@ import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.impl.{ActivationLReLU, ActivationSoftmax}
 import org.nd4j.linalg.learning.config.Nesterovs
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import utils.{Files, MyPathLabelGen, RsyncOption, RsyncWrapper, S3Wrapper, Streams}
+import utils.{Files, MyPathLabelGen, RsyncOption, RsyncWrapper, Streams}
 
 import scala.collection.JavaConverters._
 import scala.util.Random
@@ -116,13 +116,13 @@ object Training {
     }
 
     ModelSerializer.writeModel(model, path.modelPath.toFile, false)
-    new S3Wrapper(bucket).upload(path.modelName, path.modelPath)
+    aws.bucket.upload(path.modelName, path.modelPath)
+    aws.instance.stop()
   }
 
   private def setThreads(): Unit = {
     import org.nd4j.linalg.factory.Nd4j
-    import org.nd4j.nativeblas.NativeOpsHolder
-    import org.nd4j.nativeblas.Nd4jBlas
+    import org.nd4j.nativeblas.{NativeOpsHolder, Nd4jBlas}
 
     val nd4jBlas = Nd4j.factory.blas.asInstanceOf[Nd4jBlas]
     nd4jBlas.setMaxThreads(nd4jBlas.getMaxThreads * 2)

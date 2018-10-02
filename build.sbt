@@ -3,7 +3,7 @@ name := "dl4j"
 
 scalaVersion := "2.11.12"
 val dl4jVersion = "0.9.1"
-val awsScalaVersion = "8.0.3"
+val awscalaVersion = "0.8.+"
 
 libraryDependencies ++= Seq(
   "org.deeplearning4j" % "deeplearning4j-core" % dl4jVersion,
@@ -12,7 +12,8 @@ libraryDependencies ++= Seq(
   "org.nd4j" %% "nd4s" % dl4jVersion,
   "org.nd4j" % "nd4j-native-platform" % dl4jVersion,
   "com.typesafe" % "config" % "1.3.2",
-  "com.github.seratch" %% "awscala-s3" % "0.8.+",
+  "com.github.seratch" %% "awscala-s3" % awscalaVersion,
+  "com.github.seratch" %% "awscala-ec2" % awscalaVersion,
   "com.github.fracpete" % "rsync4j" % "3.1.2-8"
 )
 

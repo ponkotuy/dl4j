@@ -11,7 +11,7 @@ object MyConfig {
 
   val property = new Property(config.getConfig("property"))
 
-  val bucket = config.getString("s3.bucket")
+  val aws = new Aws(config.getConfig("aws"))
 }
 
 class Path(config: Config) {
@@ -27,4 +27,11 @@ class Property(config: Config) {
   val width = config.getInt("image.width")
   val height = config.getInt("image.height")
   val epoch = config.getInt("epoch")
+}
+
+class Aws(config: Config) {
+  val instanceId = config.getString("ec2.instance_id")
+  def instance = new EC2Instance(instanceId)
+  val bucketName = config.getString("s3.bucket")
+  val bucket = new S3Bucket(bucketName)
 }
