@@ -1,10 +1,10 @@
 import java.io.File
-import java.nio.file.Paths
+import java.nio.file.{Paths, StandardCopyOption}
 
 import labels.Rate
 import org.datavec.image.loader.NativeImageLoader
 import org.deeplearning4j.util.ModelSerializer
-import utils.Files
+import utils.{Files, S3Wrapper}
 
 object Execution {
 
@@ -12,10 +12,10 @@ object Execution {
   val Positive = 0.85
 
   def main(args: Array[String]): Unit = {
-    import utils.Path._
-    import Training.{Height, NChannels, Width}
-    val model = ModelSerializer.restoreMultiLayerNetwork(ModelPath.toFile)
-    val loader = new NativeImageLoader(Width, Height, NChannels)
+    import utils.MyConfig._
+    new S3Wrapper(bucket).download(path.modelName, path.modelPath, StandardCopyOption.REPLACE_EXISTING)
+    val model = ModelSerializer.restoreMultiLayerNetwork(path.modelPath.toFile)
+    val loader = new NativeImageLoader(property.width, property.height, Training.NChannels)
     println(model.conf())
     args.foreach { fname =>
       val matrix = loader.asMatrix(new File(fname))
