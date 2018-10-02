@@ -1,10 +1,11 @@
 package utils
 
 import java.nio.file.attribute.{BasicFileAttributes, FileAttribute}
-import java.nio.file.{CopyOption, Path => JPath, Files => JFiles}
+import java.nio.file.{CopyOption, Files => JFiles, Path => JPath}
 import java.util.function.{BiPredicate, Consumer}
 
 import scala.collection.JavaConverters._
+import scala.tools.nsc.interpreter.InputStream
 
 object Files {
   import JFunction._
@@ -24,7 +25,7 @@ object Files {
   def createSymbolicLink(link: JPath, src: JPath, attrs: FileAttribute[_]*): JPath =
     JFiles.createSymbolicLink(link, src, attrs:_*)
   def delete(path: JPath): Unit = JFiles.delete(path)
-
+  def copy(is: InputStream, path: JPath, options: CopyOption*) = JFiles.copy(is, path, options:_*)
 }
 
 object JFunction {
