@@ -7,10 +7,6 @@ import org.deeplearning4j.util.ModelSerializer
 import utils.Files
 
 object Execution {
-
-  val Negative = 0.15
-  val Positive = 0.85
-
   def main(args: Array[String]): Unit = {
     import utils.MyConfig._
     aws.bucket.download(path.modelName, path.modelPath, StandardCopyOption.REPLACE_EXISTING)

@@ -7,8 +7,8 @@ sealed abstract class Rate(val score: Double) extends ClassNameName {
 }
 
 object Rate {
-  case object Negative extends Rate(0.15)
-  case object Neutral extends Rate(0.85)
+  case object Negative extends Rate(0.10)
+  case object Neutral extends Rate(0.50)
   case object Positive extends Rate(1.0)
 
   val values = Negative :: Neutral :: Positive :: Nil
