@@ -5,6 +5,10 @@ import cv2
 import numpy
 
 
+class InvalidImageError(Exception):
+    """Raised invalid color image"""
+
+
 class ColorImage:
     def __init__(self, b, g, r):
         self.b = b
@@ -18,6 +22,10 @@ class ColorImage:
 class SplitedImage(ColorImage):
     def __init__(self, fname):
         img = cv2.imread(fname)
+        if img is None:
+            raise InvalidImageError("Faild imread image(not image?): %s" % fname)
+        if img.shape[2] != 3:
+            raise InvalidImageError("Required colorful of image: %s" % fname)
         self.fname = fname
         super().__init__(*cv2.split(img))
 
@@ -30,7 +38,8 @@ class ColorHuMoment(ColorImage):
 
     def __str__(self):
         return str(
-            {"fname": self.fname, "elems": {"r": str(self.r.ravel()), "g": str(self.g.ravel()), "b": str(self.b.ravel())}})
+            {"fname": self.fname,
+             "elems": {"r": str(self.r.ravel()), "g": str(self.g.ravel()), "b": str(self.b.ravel())}})
 
     def diff(self, hu):
         return sum(numpy.linalg.norm(x - y) for x, y in zip(self.bgr(), hu.bgr()))

@@ -18,8 +18,9 @@ server.pid
 *.eml
 /dist/
 .cache
-
-
 # End of https://www.gitignore.io/api/playframework
+
+# Python
+__pycache__/
 
 src/main/resources/application.conf
