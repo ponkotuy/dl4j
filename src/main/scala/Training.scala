@@ -122,7 +122,7 @@ object Training {
       RsyncOption.CopyLinks,
       RsyncOption.Rsh("ssh"),
       RsyncOption.ExcludeFrom(path.excludeFilePath.toString),
-      RsyncOption.DeleteExcluded()
+      RsyncOption.DeleteExcluded
     )
     Files.mkdirs(path.imagesPath)
     rsync.run(path.imageRsync, path.imagesPath.toString)
