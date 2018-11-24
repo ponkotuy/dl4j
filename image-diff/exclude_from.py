@@ -42,7 +42,7 @@ class CalcDiff:
 
 
 CHECK_RANGE = 9
-DIFF_THRESHOLD = 1.0e-7
+DIFF_THRESHOLD = 5.0e-6
 
 if __name__ == "__main__":
     parallel = Pool(min(4, multi.cpu_count()))

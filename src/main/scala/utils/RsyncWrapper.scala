@@ -39,6 +39,10 @@ object RsyncOption {
     override def set(rsync: RSync): RSync = rsync.copyLinks(true)
   }
 
+  case object DeleteExcluded extends RsyncOption {
+    override def set(rsync: RSync): RSync = rsync.deleteExcluded(true)
+  }
+
   case class Rsh(command: String) extends RsyncOption {
     override def set(rsync: RSync): RSync = rsync.rsh(command)
   }

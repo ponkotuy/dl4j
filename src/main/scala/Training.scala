@@ -113,7 +113,7 @@ object Training {
     aws.instance.stop()
   }
 
-  private def runRsync() = {
+  def runRsync() = {
     aws.bucket.download(path.excludeFile, path.excludeFilePath, StandardCopyOption.REPLACE_EXISTING)
     val rsync = new RsyncWrapper(Streams.Stdout)(
       RsyncOption.Archive,
@@ -121,7 +121,8 @@ object Training {
       RsyncOption.Verbose,
       RsyncOption.CopyLinks,
       RsyncOption.Rsh("ssh"),
-      RsyncOption.ExcludeFrom(path.excludeFilePath.toString)
+      RsyncOption.ExcludeFrom(path.excludeFilePath.toString),
+      RsyncOption.DeleteExcluded()
     )
     Files.mkdirs(path.imagesPath)
     rsync.run(path.imageRsync, path.imagesPath.toString)
