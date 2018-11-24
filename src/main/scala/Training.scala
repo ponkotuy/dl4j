@@ -1,4 +1,6 @@
 
+import java.nio.file.StandardCopyOption
+
 import org.datavec.api.io.filters.BalancedPathFilter
 import org.datavec.api.io.labels.PathLabelGenerator
 import org.datavec.api.split.{FileSplit, InputSplit}
@@ -38,17 +40,8 @@ object Training {
   val TestRate: Int = 10
   val TrainRate: Int = 100 - TestRate
 
-  val rsync = new RsyncWrapper(Streams.Stdout)(
-    RsyncOption.Archive,
-    RsyncOption.Delete,
-    RsyncOption.Verbose,
-    RsyncOption.CopyLinks,
-    RsyncOption.Rsh("ssh")
-  )
-
   def main(args: Array[String]): Unit = {
-    Files.mkdirs(path.imagesPath)
-    rsync.run(path.imageRsync, path.imagesPath.toString)
+    runRsync()
     setThreads()
     val random = new Random(Seed)
     val labelGen = MyPathLabelGen
@@ -118,6 +111,20 @@ object Training {
     ModelSerializer.writeModel(model, path.modelPath.toFile, false)
     aws.bucket.upload(path.modelName, path.modelPath)
     aws.instance.stop()
+  }
+
+  private def runRsync() = {
+    aws.bucket.download(path.excludeFile, path.excludeFilePath, StandardCopyOption.REPLACE_EXISTING)
+    val rsync = new RsyncWrapper(Streams.Stdout)(
+      RsyncOption.Archive,
+      RsyncOption.Delete,
+      RsyncOption.Verbose,
+      RsyncOption.CopyLinks,
+      RsyncOption.Rsh("ssh"),
+      RsyncOption.ExcludeFrom(path.excludeFilePath.toString)
+    )
+    Files.mkdirs(path.imagesPath)
+    rsync.run(path.imageRsync, path.imagesPath.toString)
   }
 
   private def setThreads(): Unit = {

@@ -42,6 +42,10 @@ object RsyncOption {
   case class Rsh(command: String) extends RsyncOption {
     override def set(rsync: RSync): RSync = rsync.rsh(command)
   }
+
+  case class ExcludeFrom(file: String) extends RsyncOption {
+    override def set(rsync: RSync): RSync = rsync.excludeFrom(file)
+  }
 }
 
 object Streams {

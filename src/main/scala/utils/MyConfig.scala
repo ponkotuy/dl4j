@@ -18,6 +18,8 @@ class Path(config: Config) {
   lazy val imagesPath: JPath = dl4jPath.resolve(config.getString("images_dir"))
   lazy val modelPath: JPath = dl4jPath.resolve(modelName)
   lazy val imageRsync: String = config.getString("image_rsync")
+  lazy val excludeFile: String = config.getString("exclude_file")
+  lazy val excludeFilePath: JPath = dl4jPath.resolve(excludeFile)
   lazy val originalImagePath: JPath = Paths.get(config.getString("original_images_dir"))
 }
 
