@@ -21,10 +21,12 @@ class Path:
         self.images_dir = path.join(self.dl4j_dir, conf.get('images_dir'))
         self.exclude_file = conf.get('exclude_file')
         self.model_file = path.join(self.dl4j_dir, self.exclude_file)
-        self.originalImagesDir = conf.get('original_images_dir')
+        self.end_nearly_dirs = conf.get('end_nearly_dirs')
+        self.end_nearly_dirs_file = path.join(self.dl4j_dir, conf.get('end_nearly_dirs'))
+        self.original_images_dir = conf.get('original_images_dir')
 
     def __str__(self):
-        return str({'dl4jDir': self.dl4j_dir, 'imagesDir': self.images_dir, 'originalImagesDir': self.originalImagesDir})
+        return str({'dl4jDir': self.dl4j_dir, 'imagesDir': self.images_dir, 'originalImagesDir': self.original_images_dir})
 
 
 class Aws:

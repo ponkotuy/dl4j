@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-
 import os
+
+import multiprocessing as multi
+from multiprocessing import Pool
 from os import path
 
+from common import calc_hu_moments, CalcDiff
 from config import MyConfig
-from image_helper import SplitedImage, ColorHuMoment, InvalidImageError
-from multiprocessing import Pool
-import multiprocessing as multi
 
 
 def files(directory):
@@ -16,42 +16,21 @@ def files(directory):
             yield path.join(p, f)
 
 
-def load_image(fname):
-    try:
-        image = SplitedImage(fname)
-    except InvalidImageError:
-        return fname  # 失敗はファイル名
-    else:
-        return ColorHuMoment(image)
-
-
 def output(local_path, s3_path, file_names, bucket):
     with open(local_path, 'w') as f:
         f.writelines(name + '\n' for name in file_names)
     bucket.upload_file(local_path, s3_path)
 
 
-class CalcDiff:
-    def __init__(self, hu_moments):
-        self.hu_moments = hu_moments
-
-    def __call__(self, xs):
-        (idx, hu) = xs
-        end = min(idx + CHECK_RANGE, len(self.hu_moments))
-        return any(hu.diff(that) <= DIFF_THRESHOLD for that in self.hu_moments[(idx + 1):end])
-
-
-CHECK_RANGE = 9
 DIFF_THRESHOLD = 5.0e-6
+PARALLEL_COUNT_MAX = 6
 
 if __name__ == "__main__":
-    parallel = Pool(min(4, multi.cpu_count()))
+    parallel = Pool(min(PARALLEL_COUNT_MAX, multi.cpu_count()))
     config = MyConfig()
     dl4j_dir = path.join(config.path.images_dir, '')
-    results = parallel.map(load_image, list(files(dl4j_dir)))
-    hu_moments = [x for x in results if isinstance(x, ColorHuMoment)]
-    failed = [x for x in results if isinstance(x, str)]
-    enabled = parallel.map(CalcDiff(hu_moments), enumerate(hu_moments))
+    (hu_moments, failed) = calc_hu_moments(list(files(dl4j_dir)), parallel)
+    enabled = parallel.map(CalcDiff(hu_moments, DIFF_THRESHOLD), enumerate(hu_moments))
     failed += [hu.fname for hu, b in zip(hu_moments, enabled) if b]
     erase_path = config.path.images_dir + '/'
     fnames = [name.replace(erase_path, '') for name in failed]
