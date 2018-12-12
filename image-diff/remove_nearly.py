@@ -21,7 +21,7 @@ if __name__ == "__main__":
     images_dir = config.path.original_images_dir
     db = LevelDB(config.path.end_nearly_dirs_file, DOUBLE_FMT)
     for p, _, fs in os.walk(images_dir):
-        if fs and (db.get(p) or 0) < DIFF_THRESHOLD:
+        if fs and DIFF_THRESHOLD < (db.get(p) or 1.0):
             print(p)
             (hu_moments, _) = calc_hu_moments([path.join(p, f) for f in fs], parallel)
             filtered_diff = parallel.map(CalcDiff(hu_moments, DIFF_THRESHOLD), enumerate(hu_moments))

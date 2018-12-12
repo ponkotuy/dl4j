@@ -1,7 +1,7 @@
 package utils
 
 import java.nio.file.attribute.{BasicFileAttributes, FileAttribute}
-import java.nio.file.{CopyOption, Files => JFiles, Path => JPath}
+import java.nio.file.{CopyOption, OpenOption, Files => JFiles, Path => JPath}
 import java.util.function.{BiPredicate, Consumer}
 
 import scala.collection.JavaConverters._
@@ -26,6 +26,9 @@ object Files {
     JFiles.createSymbolicLink(link, src, attrs:_*)
   def delete(path: JPath): Unit = JFiles.delete(path)
   def copy(is: InputStream, path: JPath, options: CopyOption*) = JFiles.copy(is, path, options:_*)
+
+  def newInputStream(path: JPath, options: OpenOption*): InputStream = JFiles.newInputStream(path, options:_*)
+  def readAllBytes(path: JPath): Array[Byte] = JFiles.readAllBytes(path)
 }
 
 object JFunction {
