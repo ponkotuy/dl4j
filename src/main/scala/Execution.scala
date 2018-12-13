@@ -17,7 +17,7 @@ object Execution {
       val matrix = loader.asMatrix(new File(fname))
       val score = model.output(matrix).getDouble(0)
       println(s"${fname}: ${score}")
-      splitDir(fname, Rate.find(score))
+      splitDir(fname, Rate.fromScore(score))
     }
   }
 

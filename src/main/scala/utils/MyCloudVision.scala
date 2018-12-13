@@ -25,9 +25,6 @@ object MyCloudVision {
     val path = Paths.get(fname)
     val bytes = Files.readAllBytes(path)
     val byteString = ByteString.copyFrom(bytes)
-//    val image = Image.parseFrom(Files.newInputStream(path))
-//    image.getUnknownFields
-//    image
     Image.newBuilder().setContent(byteString).build()
   }
 }
