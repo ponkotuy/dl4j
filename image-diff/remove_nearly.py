@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import sys
+
 from os import path
 
 import os
@@ -18,7 +20,7 @@ DOUBLE_FMT = 'd'
 if __name__ == "__main__":
     parallel = Pool(min(PARALLEL_COUNT_MAX, multi.cpu_count()))
     config = MyConfig()
-    images_dir = config.path.original_images_dir
+    images_dir = sys.argv[1] if 2 <= len(sys.argv) else config.path.original_images_dir
     db = LevelDB(config.path.end_nearly_dirs_file, DOUBLE_FMT)
     for p, _, fs in os.walk(images_dir):
         if fs and DIFF_THRESHOLD < (db.get(p) or 1.0):

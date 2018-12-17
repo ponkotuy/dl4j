@@ -15,7 +15,8 @@ libraryDependencies ++= Seq(
   "com.github.seratch" %% "awscala-s3" % awscalaVersion,
   "com.github.seratch" %% "awscala-ec2" % awscalaVersion,
   "com.github.fracpete" % "rsync4j" % "3.1.2-8",
-  "com.google.cloud" % "google-cloud-vision" % "1.55.0"
+  "com.google.cloud" % "google-cloud-vision" % "1.55.0",
+  "com.amazonaws" % "aws-java-sdk" % "1.11.468"
 )
 
 run / fork := true

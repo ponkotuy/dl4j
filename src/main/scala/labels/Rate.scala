@@ -2,6 +2,7 @@ package labels
 
 import java.nio.file.{Path => JPath}
 
+import com.amazonaws.services.rekognition.model.ModerationLabel
 import com.google.cloud.vision.v1.SafeSearchAnnotation
 
 sealed abstract class Rate extends ClassNameName {
