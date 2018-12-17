@@ -1,7 +1,7 @@
 package utils
 
 import java.nio.file.attribute.{BasicFileAttributes, FileAttribute}
-import java.nio.file.{CopyOption, OpenOption, Files => JFiles, Path => JPath}
+import java.nio.file.{CopyOption, LinkOption, OpenOption, Files => JFiles, Path => JPath}
 import java.util.function.{BiPredicate, Consumer}
 
 import scala.collection.JavaConverters._
@@ -29,6 +29,8 @@ object Files {
 
   def newInputStream(path: JPath, options: OpenOption*): InputStream = JFiles.newInputStream(path, options:_*)
   def readAllBytes(path: JPath): Array[Byte] = JFiles.readAllBytes(path)
+
+  def isDirectory(path: JPath, options: LinkOption*): Boolean = JFiles.isDirectory(path, options:_*)
 }
 
 object JFunction {
