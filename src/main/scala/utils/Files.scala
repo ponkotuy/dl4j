@@ -31,6 +31,9 @@ object Files {
   def readAllBytes(path: JPath): Array[Byte] = JFiles.readAllBytes(path)
 
   def isDirectory(path: JPath, options: LinkOption*): Boolean = JFiles.isDirectory(path, options:_*)
+  def isRegularFile(path: JPath, options: LinkOption*): Boolean = JFiles.isRegularFile(path, options:_*)
+  def isReadable(path: JPath): Boolean = JFiles.isReadable(path)
+  def isWritable(path: JPath): Boolean = JFiles.isWritable(path)
 }
 
 object JFunction {

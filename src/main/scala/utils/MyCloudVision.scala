@@ -1,6 +1,6 @@
 package utils
 
-import java.nio.file.Paths
+import java.nio.file.{Paths, Path => JPath}
 
 import com.google.cloud.vision.v1._
 import com.google.protobuf.ByteString
@@ -21,10 +21,15 @@ class MyCloudVision {
 }
 
 object MyCloudVision {
-  def loadImage(fname: String): Image = {
-    val path = Paths.get(fname)
-    val bytes = Files.readAllBytes(path)
-    val byteString = ByteString.copyFrom(bytes)
-    Image.newBuilder().setContent(byteString).build()
+  def loadImagePath(path: JPath): Option[Image] = {
+    if(Files.isRegularFile(path) && Files.isReadable(path)) {
+      val bytes = Files.readAllBytes(path)
+      val byteString = ByteString.copyFrom(bytes)
+      Some(Image.newBuilder().setContent(byteString).build())
+    } else None
+  }
+
+  def loadImage(fname: String): Option[Image] = {
+    loadImagePath(Paths.get(fname))
   }
 }
